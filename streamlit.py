@@ -1,7 +1,7 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="DAV Public School — Admission Portal",
+    page_title="CENTRAL ENGLISH SCHOOL — Admission Portal",
     page_icon="🏫",
     layout="wide"
 )
@@ -296,8 +296,8 @@ st.markdown("""
 <div class="banner">
     <div class="banner-logo">🏫</div>
     <div class="banner-text">
-        <h1>DAV Public School</h1>
-        <p>Dayanand Anglo Vedic — Excellence in Education Since 1886</p>
+        <h1>CENTRAL ENGLISH SCHOOL</h1>
+        <p>C.E.S(Central English School) — Excellence in Education Since 1886</p>
     </div>
     <div class="banner-badge">
         <b>2026–27</b>
@@ -357,7 +357,7 @@ with col_form:
                     <div class="result-icon">🎉</div>
                     <div class="result-title" style="color:#2e7d32">{student.message}</div>
                     <div class="result-sub" style="color:#388e3c">
-                        Welcome to DAV Public School, {student.name.split()[0]}!<br>
+                        Welcome to CENTRAL ENGLISH SCHOOL, {student.name.split()[0]}!<br>
                         Your application for <b>{target_class}</b> has been received.
                     </div>
                 </div>
@@ -424,10 +424,10 @@ with col_right:
     st.markdown('<div class="card-title">📞 Contact Us</div>', unsafe_allow_html=True)
     st.markdown("""
     <div style="font-size:0.88rem; color:#3949ab; line-height:2;">
-        📧 admission@davschool.edu.in<br>
+        📧 admission@Cesschool.edu.in<br>
         📱 +91 98765 43210<br>
         🕐 Mon–Sat: 9AM – 4PM<br>
-        📍 DAV Public School, Sector 14
+        📍 CENTRAL ENGLISH SCHOOL, Sector 14
     </div>
     """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
