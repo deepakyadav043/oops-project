@@ -1,350 +1,433 @@
 import streamlit as st
 
-# ─────────────────────────────────────────────
-# Page Config
-# ─────────────────────────────────────────────
 st.set_page_config(
-    page_title="Student Admission Portal",
-    page_icon="🎓",
+    page_title="DAV Public School — Admission Portal",
+    page_icon="🏫",
     layout="wide"
 )
 
-# ─────────────────────────────────────────────
-# Custom CSS
-# ─────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Merriweather:wght@700;900&display=swap');
 
-* { font-family: 'Poppins', sans-serif; }
-
-/* Background */
-.stApp {
-    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-    min-height: 100vh;
-}
-
-/* Hide default streamlit header */
+* { font-family: 'Nunito', sans-serif; }
 #MainMenu, footer, header { visibility: hidden; }
 
-/* Main Title */
-.main-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 3rem;
-    font-weight: 700;
-    color: #ffffff;
-    text-align: center;
-    margin-bottom: 0.2rem;
-    text-shadow: 0 0 30px rgba(130, 100, 255, 0.6);
+.stApp {
+    background: #f0f4ff;
 }
 
-.sub-title {
-    text-align: center;
-    color: #a89ee0;
-    font-size: 1rem;
-    margin-bottom: 2rem;
-    font-weight: 300;
-}
-
-/* Card */
-.card {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+/* ── Top Banner ── */
+.banner {
+    background: linear-gradient(120deg, #1a237e 0%, #283593 50%, #1565c0 100%);
     border-radius: 20px;
+    padding: 2.5rem 3rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    box-shadow: 0 10px 40px rgba(26,35,126,0.25);
+}
+.banner-logo {
+    width: 90px; height: 90px;
+    background: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.8rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    flex-shrink: 0;
+}
+.banner-text h1 {
+    font-family: 'Merriweather', serif;
+    color: white;
+    font-size: 2rem;
+    margin: 0 0 0.2rem 0;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.banner-text p {
+    color: #90caf9;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 400;
+}
+.banner-badge {
+    margin-left: auto;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 12px;
+    padding: 0.6rem 1.2rem;
+    color: white;
+    font-size: 0.85rem;
+    text-align: center;
+}
+.banner-badge b { display: block; font-size: 1.1rem; }
+
+/* ── Cards ── */
+.form-card {
+    background: white;
+    border-radius: 18px;
     padding: 2rem;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 24px rgba(26,35,126,0.08);
+    border: 1px solid #e8eaf6;
+    margin-bottom: 1.5rem;
 }
-
-/* Section Header */
-.section-header {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #c4b5fd;
-    border-bottom: 2px solid rgba(196, 181, 253, 0.3);
-    padding-bottom: 0.5rem;
+.card-title {
+    font-family: 'Merriweather', serif;
+    font-size: 1.05rem;
+    color: #1a237e;
+    font-weight: 700;
     margin-bottom: 1.2rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 2px solid #e8eaf6;
+    display: flex; align-items: center; gap: 0.5rem;
 }
 
-/* Requirement Box */
-.req-box-10 {
-    background: rgba(52, 211, 153, 0.15);
-    border-left: 4px solid #34d399;
-    border-radius: 10px;
-    padding: 0.8rem 1rem;
-    margin-bottom: 0.8rem;
-    color: #a7f3d0;
-    font-size: 0.9rem;
+/* ── Class Selector ── */
+.class-btn-row { display: flex; gap: 1rem; margin-bottom: 0.5rem; }
+div[data-testid="stRadio"] > label { display: none; }
+div[data-testid="stRadio"] > div {
+    display: flex !important;
+    gap: 1rem !important;
+    flex-direction: row !important;
 }
-
-.req-box-12 {
-    background: rgba(251, 191, 36, 0.15);
-    border-left: 4px solid #fbbf24;
-    border-radius: 10px;
-    padding: 0.8rem 1rem;
-    margin-bottom: 0.8rem;
-    color: #fde68a;
-    font-size: 0.9rem;
+div[data-testid="stRadio"] > div > label {
+    display: flex !important;
+    flex: 1;
+    cursor: pointer;
 }
-
-/* Age Display */
-.age-display {
-    background: rgba(139, 92, 246, 0.2);
-    border: 1px solid rgba(139, 92, 246, 0.4);
+div[data-testid="stRadio"] > div > label > div:first-child { display: none; }
+div[data-testid="stRadio"] > div > label > div:last-child {
+    width: 100%;
+    background: #f0f4ff;
+    border: 2px solid #c5cae9;
     border-radius: 12px;
     padding: 1rem;
     text-align: center;
-    margin-top: 1rem;
-}
-
-.age-number {
-    font-size: 2.5rem;
     font-weight: 700;
-    color: #c4b5fd;
+    color: #3949ab;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+div[data-testid="stRadio"] > div > label:has(input:checked) > div:last-child {
+    background: #1a237e;
+    border-color: #1a237e;
+    color: white;
+    box-shadow: 0 4px 15px rgba(26,35,126,0.3);
 }
 
-.age-label {
-    color: #a89ee0;
-    font-size: 0.85rem;
-}
-
-/* Success Box */
-.success-box {
-    background: rgba(52, 211, 153, 0.15);
-    border: 1px solid #34d399;
-    border-radius: 15px;
-    padding: 1.5rem;
-    text-align: center;
-    animation: fadeIn 0.5s ease;
-}
-
-.error-box {
-    background: rgba(239, 68, 68, 0.15);
-    border: 1px solid #ef4444;
-    border-radius: 15px;
-    padding: 1.5rem;
-    text-align: center;
-    animation: fadeIn 0.5s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Detail Row */
-.detail-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.6rem 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    color: #e2d9f3;
-    font-size: 0.9rem;
-}
-
-.detail-label { color: #a89ee0; }
-.detail-value { font-weight: 500; color: #ffffff; }
-
-/* Input label color override */
-label { color: #c4b5fd !important; font-size: 0.9rem !important; }
-
-/* Selectbox */
-.stSelectbox > div > div {
-    background: rgba(255,255,255,0.08) !important;
-    border: 1px solid rgba(255,255,255,0.15) !important;
-    border-radius: 10px !important;
-    color: white !important;
-}
-
-/* Text Input */
+/* ── Inputs ── */
+label { color: #3949ab !important; font-weight: 600 !important; font-size: 0.88rem !important; }
 .stTextInput > div > div > input,
-.stNumberInput > div > div > input {
-    background: rgba(255,255,255,0.08) !important;
-    border: 1px solid rgba(255,255,255,0.15) !important;
+.stNumberInput > div > div > input,
+.stTextArea textarea {
+    border: 1.5px solid #c5cae9 !important;
     border-radius: 10px !important;
-    color: white !important;
+    background: #f8f9ff !important;
+    color: #1a237e !important;
+    font-family: 'Nunito', sans-serif !important;
+    font-size: 0.95rem !important;
+    padding: 0.6rem 1rem !important;
+}
+.stTextInput > div > div > input:focus,
+.stNumberInput > div > div > input:focus {
+    border-color: #3949ab !important;
+    box-shadow: 0 0 0 3px rgba(57,73,171,0.12) !important;
 }
 
-/* Button */
+/* ── Submit Button ── */
 .stButton > button {
-    background: linear-gradient(135deg, #7c3aed, #4f46e5) !important;
+    background: linear-gradient(135deg, #1a237e, #1565c0) !important;
     color: white !important;
     border: none !important;
     border-radius: 12px !important;
-    padding: 0.7rem 2rem !important;
-    font-size: 1rem !important;
-    font-weight: 600 !important;
+    padding: 0.75rem 2rem !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
     width: 100% !important;
-    transition: all 0.3s ease !important;
-    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4) !important;
+    letter-spacing: 0.5px !important;
+    box-shadow: 0 4px 15px rgba(26,35,126,0.3) !important;
+    transition: all 0.2s !important;
+    font-family: 'Nunito', sans-serif !important;
 }
-
 .stButton > button:hover {
     transform: translateY(-2px) !important;
-    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.6) !important;
+    box-shadow: 0 8px 25px rgba(26,35,126,0.45) !important;
 }
 
-/* Divider */
-hr { border-color: rgba(255,255,255,0.1) !important; }
+/* ── Req Cards ── */
+.req-card-10 {
+    background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+    border-left: 5px solid #43a047;
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+}
+.req-card-12 {
+    background: linear-gradient(135deg, #fff3e0, #fff8e1);
+    border-left: 5px solid #fb8c00;
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+}
+.req-title { font-weight: 800; font-size: 0.95rem; margin-bottom: 0.3rem; }
+.req-10 .req-title { color: #2e7d32; }
+.req-12 .req-title { color: #e65100; }
+.req-desc { font-size: 0.85rem; color: #555; }
+
+/* ── Age Meter ── */
+.age-meter {
+    background: linear-gradient(135deg, #e8eaf6, #f3f4ff);
+    border: 1px solid #c5cae9;
+    border-radius: 14px;
+    padding: 1.2rem;
+    text-align: center;
+    margin-top: 1rem;
+}
+.age-big { font-size: 3rem; font-weight: 800; color: #1a237e; line-height: 1; }
+.age-sub { font-size: 0.8rem; color: #7986cb; margin-top: 0.2rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+.eligible-tag {
+    display: inline-block;
+    margin-top: 0.8rem;
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+.tag-green { background: #e8f5e9; color: #2e7d32; }
+.tag-yellow { background: #fff3e0; color: #e65100; }
+
+/* ── Result Box ── */
+.result-success {
+    background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+    border: 2px solid #43a047;
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
+    margin-top: 1rem;
+}
+.result-fail {
+    background: linear-gradient(135deg, #ffebee, #fce4ec);
+    border: 2px solid #e53935;
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
+    margin-top: 1rem;
+}
+.result-icon { font-size: 2.5rem; }
+.result-title { font-size: 1.3rem; font-weight: 800; margin: 0.4rem 0; }
+.result-sub { font-size: 0.9rem; }
+
+/* ── Detail Table ── */
+.detail-table {
+    background: #f8f9ff;
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    margin-top: 1rem;
+    border: 1px solid #e8eaf6;
+}
+.detail-row-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid #e8eaf6;
+    font-size: 0.9rem;
+}
+.detail-row-item:last-child { border-bottom: none; }
+.d-label { color: #7986cb; font-weight: 600; }
+.d-value { color: #1a237e; font-weight: 700; }
+
+/* ── Step Indicator ── */
+.steps {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
+}
+.step {
+    flex: 1;
+    height: 5px;
+    border-radius: 10px;
+    background: #e8eaf6;
+}
+.step-active { background: #1a237e; }
+.step-label {
+    font-size: 0.78rem;
+    color: #9fa8da;
+    text-align: center;
+    margin-top: 0.3rem;
+    font-weight: 600;
+}
 
 </style>
 """, unsafe_allow_html=True)
 
-
 # ─────────────────────────────────────────────
 # Classes
 # ─────────────────────────────────────────────
-
 class Student:
-    def __init__(self, name, age, email, phone_number):
-        self.name         = name
-        self.age          = age
-        self.email        = email
-        self.phone_number = phone_number
-
+    def __init__(self, name, age, email, phone, gender, address):
+        self.name    = name
+        self.age     = age
+        self.email   = email
+        self.phone   = phone
+        self.gender  = gender
+        self.address = address
 
 class Class10(Student):
-    def __init__(self, name, age, email, phone_number):
-        super().__init__(name, age, email, phone_number)
+    def __init__(self, name, age, email, phone, gender, address):
+        super().__init__(name, age, email, phone, gender, address)
         self.admitted = True
-        self.message  = "Admission Successful!"
-
+        self.message  = "Admission Confirmed!"
 
 class Class12(Student):
-    def __init__(self, name, age, email, phone_number):
-        super().__init__(name, age, email, phone_number)
+    def __init__(self, name, age, email, phone, gender, address):
+        super().__init__(name, age, email, phone, gender, address)
         if self.age >= 16:
             self.admitted = True
-            self.message  = "Admission Successful!"
+            self.message  = "Admission Confirmed!"
         else:
             self.admitted = False
-            self.message  = "Admission Failed! Age must be 16 or above for Class 12."
-
+            self.message  = "Not Eligible for Class 12"
 
 # ─────────────────────────────────────────────
-# UI Layout
+# Banner
 # ─────────────────────────────────────────────
+st.markdown("""
+<div class="banner">
+    <div class="banner-logo">🏫</div>
+    <div class="banner-text">
+        <h1>DAV Public School</h1>
+        <p>Dayanand Anglo Vedic — Excellence in Education Since 1886</p>
+    </div>
+    <div class="banner-badge">
+        <b>2026–27</b>
+        Admissions Open
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
-# Header
-st.markdown('<div class="main-title">🎓 Student Admission Portal</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-title">Complete the form below to secure your admission</div>', unsafe_allow_html=True)
+# ─────────────────────────────────────────────
+# Layout
+# ─────────────────────────────────────────────
+col_form, col_right = st.columns([2.2, 1.2])
 
-# 3 Columns Layout
-col_nav, col_form, col_req = st.columns([1.2, 2.5, 1.5])
-
-# ── Left: Navigation ──────────────────────────
-with col_nav:
-    st.markdown('<div class="card">', unsafe_allow_html=True)
-    st.markdown("### 🧭 Navigation")
-    st.markdown("---")
-    st.markdown("📝 **Apply for Admission**")
-    st.markdown("👥 View Registered Students")
-    st.markdown("---")
-    st.markdown("### 💬 Help & Support")
-    st.markdown("For queries, contact:")
-    st.markdown("📧 support@eduportal.com")
+with col_form:
+    # Class Selector
+    st.markdown('<div class="form-card">', unsafe_allow_html=True)
+    st.markdown('<div class="card-title">🎓 Select Target Class</div>', unsafe_allow_html=True)
+    target_class = st.radio("", ["Class 10th", "Class 12th"], horizontal=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ── Middle: Form ──────────────────────────────
-with col_form:
-    st.markdown('<div class="card">', unsafe_allow_html=True)
-    st.markdown('<div class="section-header">📋 Application Form</div>', unsafe_allow_html=True)
+    # Personal Info
+    st.markdown('<div class="form-card">', unsafe_allow_html=True)
+    st.markdown('<div class="card-title">👤 Personal Information</div>', unsafe_allow_html=True)
 
-    # Class Selection
-    target_class = st.selectbox("Select Target Class", ["Class 10th", "Class 12th"])
-
-    # Name & Age side by side
-    c1, c2 = st.columns([2, 1])
+    c1, c2 = st.columns(2)
     with c1:
-        name = st.text_input("Full Name", placeholder="Enter your full name")
+        name = st.text_input("Full Name", placeholder="e.g. Rahul Sharma")
     with c2:
-        age = st.number_input("Age", min_value=5, max_value=25, value=15, step=1)
+        gender = st.selectbox("Gender", ["Male", "Female", "Other"])
 
-    # Email
-    email = st.text_input("Email Address", placeholder="johndoe@example.com")
+    c3, c4 = st.columns(2)
+    with c3:
+        age = st.number_input("Date of Birth (Age)", min_value=5, max_value=25, value=15, step=1)
+    with c4:
+        phone = st.text_input("Contact Number", placeholder="+91 XXXXX XXXXX")
 
-    # Phone
-    phone = st.text_input("Contact Number", placeholder="+1 234 567 890")
+    email = st.text_input("Email Address", placeholder="student@example.com")
+    address = st.text_area("Residential Address", placeholder="House No., Street, City, State", height=80)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # Submit Button
-    submit = st.button("🎯 Submit Application")
+    # Submit
+    submit = st.button("📨 Submit Application")
 
     # Result
     if submit:
-        if not name or not email or not phone:
-            st.warning("⚠️ Please fill in all fields before submitting.")
+        if not name.strip() or not email.strip() or not phone.strip() or not address.strip():
+            st.warning("⚠️ Please fill in all required fields.")
         else:
             if target_class == "Class 10th":
-                student = Class10(name, age, email, phone)
+                student = Class10(name, age, email, phone, gender, address)
             else:
-                student = Class12(name, age, email, phone)
-
-            st.markdown("<br>", unsafe_allow_html=True)
+                student = Class12(name, age, email, phone, gender, address)
 
             if student.admitted:
                 st.markdown(f"""
-                <div class="success-box">
-                    <div style="font-size:2.5rem">🎉</div>
-                    <div style="font-size:1.3rem; font-weight:700; color:#34d399; margin:0.5rem 0">{student.message}</div>
-                    <div style="color:#a7f3d0; font-size:0.9rem">Welcome to {target_class}!</div>
+                <div class="result-success">
+                    <div class="result-icon">🎉</div>
+                    <div class="result-title" style="color:#2e7d32">{student.message}</div>
+                    <div class="result-sub" style="color:#388e3c">
+                        Welcome to DAV Public School, {student.name.split()[0]}!<br>
+                        Your application for <b>{target_class}</b> has been received.
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
 
-                st.markdown("<br>", unsafe_allow_html=True)
-                st.markdown("**📄 Student Details:**")
                 st.markdown(f"""
-                <div style="background:rgba(255,255,255,0.05); border-radius:12px; padding:1rem;">
-                    <div class="detail-row"><span class="detail-label">👤 Name</span><span class="detail-value">{student.name}</span></div>
-                    <div class="detail-row"><span class="detail-label">🎂 Age</span><span class="detail-value">{student.age} years</span></div>
-                    <div class="detail-row"><span class="detail-label">📧 Email</span><span class="detail-value">{student.email}</span></div>
-                    <div class="detail-row"><span class="detail-label">📱 Phone</span><span class="detail-value">{student.phone_number}</span></div>
-                    <div class="detail-row"><span class="detail-label">🏫 Class</span><span class="detail-value">{target_class}</span></div>
+                <div class="detail-table">
+                    <div class="detail-row-item"><span class="d-label">👤 Full Name</span><span class="d-value">{student.name}</span></div>
+                    <div class="detail-row-item"><span class="d-label">🎂 Age</span><span class="d-value">{student.age} years</span></div>
+                    <div class="detail-row-item"><span class="d-label">⚧ Gender</span><span class="d-value">{student.gender}</span></div>
+                    <div class="detail-row-item"><span class="d-label">📧 Email</span><span class="d-value">{student.email}</span></div>
+                    <div class="detail-row-item"><span class="d-label">📱 Phone</span><span class="d-value">{student.phone}</span></div>
+                    <div class="detail-row-item"><span class="d-label">🏠 Address</span><span class="d-value">{student.address}</span></div>
+                    <div class="detail-row-item"><span class="d-label">🏫 Class</span><span class="d-value">{target_class}</span></div>
                 </div>
                 """, unsafe_allow_html=True)
+
             else:
                 st.markdown(f"""
-                <div class="error-box">
-                    <div style="font-size:2.5rem">❌</div>
-                    <div style="font-size:1.3rem; font-weight:700; color:#ef4444; margin:0.5rem 0">{student.message}</div>
-                    <div style="color:#fca5a5; font-size:0.9rem">Your age: {student.age} years | Required: 16+ years</div>
+                <div class="result-fail">
+                    <div class="result-icon">❌</div>
+                    <div class="result-title" style="color:#c62828">{student.message}</div>
+                    <div class="result-sub" style="color:#e53935">
+                        Your age is <b>{student.age} years</b>. Class 12th requires minimum <b>16 years</b>.<br>
+                        You can still apply for <b>Class 10th</b>.
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
 
+with col_right:
+    # Requirements
+    st.markdown('<div class="form-card">', unsafe_allow_html=True)
+    st.markdown('<div class="card-title">📌 Admission Requirements</div>', unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="req-card-10">
+        <div class="req-title" style="color:#2e7d32">✅ Class 10th</div>
+        <div class="req-desc">Open for all students. No strict age restriction applied.</div>
+    </div>
+    <div class="req-card-12">
+        <div class="req-title" style="color:#e65100">⚠️ Class 12th</div>
+        <div class="req-desc">Minimum age of <b>16 years</b> required. Students below 16 are not eligible.</div>
+    </div>
+    """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ── Right: Requirements ───────────────────────
-with col_req:
-    st.markdown('<div class="card">', unsafe_allow_html=True)
-    st.markdown("### 📌 Admission Requirements")
-    st.markdown("---")
+    # Age Display
+    st.markdown('<div class="form-card">', unsafe_allow_html=True)
+    st.markdown('<div class="card-title">📊 Your Age Status</div>', unsafe_allow_html=True)
 
-    st.markdown("""
-    <div class="req-box-10">
-        ✅ <strong>Class 10th</strong><br>
-        No strict age restriction.
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div class="req-box-12">
-        ⚠️ <strong>Class 12th</strong><br>
-        Mandatory age of <strong>16 years or older</strong>.
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("---")
-    st.markdown("**Your Inputted Age**")
+    tag = '<span class="eligible-tag tag-green">✅ Eligible for Both Classes</span>' if age >= 16 else '<span class="eligible-tag tag-yellow">⚠️ Eligible for Class 10th Only</span>'
 
     st.markdown(f"""
-    <div class="age-display">
-        <div class="age-number">{age}</div>
-        <div class="age-label">years old</div>
-        <div style="margin-top:0.5rem; font-size:0.85rem; color: {'#34d399' if age >= 16 else '#fbbf24'}">
-            {'✅ Eligible for both classes' if age >= 16 else '⚠️ Eligible for Class 10th only'}
-        </div>
+    <div class="age-meter">
+        <div class="age-big">{age}</div>
+        <div class="age-sub">Years Old</div>
+        {tag}
     </div>
     """, unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
+    # Contact Card
+    st.markdown('<div class="form-card">', unsafe_allow_html=True)
+    st.markdown('<div class="card-title">📞 Contact Us</div>', unsafe_allow_html=True)
+    st.markdown("""
+    <div style="font-size:0.88rem; color:#3949ab; line-height:2;">
+        📧 admission@davschool.edu.in<br>
+        📱 +91 98765 43210<br>
+        🕐 Mon–Sat: 9AM – 4PM<br>
+        📍 DAV Public School, Sector 14
+    </div>
+    """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
